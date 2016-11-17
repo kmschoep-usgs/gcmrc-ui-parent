@@ -190,7 +190,7 @@
 				</div>
 				<div id="content" class="row-fluid">
 					<div class="span3">
-						<div class="innerRightSidebar">
+                                                    <div id="bedLoadSlider" class="innerRightSidebar">
 							<div class="sectionTitle">Adjustable Bedload</div>
 							<div id="bedLoadList" class="rightSidebarText"></div>
 						</div>

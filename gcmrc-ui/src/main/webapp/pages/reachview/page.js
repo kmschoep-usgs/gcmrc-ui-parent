@@ -73,6 +73,9 @@ GCMRC.Page = {
 	buildSliderInfo : function(div, dateStr, multiplier, loadDivKey, dataType) {
 		div.append('<div>Uncertainty for ' + (("BIBE" === CONFIG.networkName)?"Tornillo Creek":"Major Tributary") + ' ' + dataType + ' Loads <span class="' + loadDivKey + '_qual' + multiplier + '"></span>% after ' + dateStr + '</div>');
 	},
+        buildRadioInfo : function(div) {
+		div.append('<div class="form-inline"><label class="radio bedRadio"><input type="radio" name="bedLoadToggle" value="yes">Yes</label><label class="radio bedRadio"><input type="radio" name="bedLoadToggle" value="no">No</label></div>');
+	},
 	buildGraphClicked: function() {
 		var NETWORK_DINO = "DINO";
 		var begin = $("input[name='beginPosition']").val();
@@ -136,6 +139,18 @@ GCMRC.Page = {
 				useLagged: 'true'
 			};
 
+			var bedLoadServiceOptions = {
+				beginPosition: begin,
+				endPosition: end,
+				column: 'Calc Inst Sand Bedload',
+				tz: '-' + CONFIG.networkHoursOffset,
+				cutoffBefore: GCMRC.Page.earliestPositionISO,
+				cutoffAfter: GCMRC.Page.latestPositionISO,
+				every: CONFIG.everyPeriod,
+				noDataFilter: 'true',
+				useLagged: 'true'
+			};
+                        
 			var aggTime = GCMRC.Page.checkIfAgg(serviceOptions);
 
 			if (aggTime) {
@@ -174,6 +189,13 @@ GCMRC.Page = {
 					},
 			serviceOptions);
 
+			if (CONFIG.networkName === NETWORK_DINO) {
+			    GCMRC.Page.getBedLoadData(
+				'agg',
+				{bedLoad: 'Calc Inst Sand Bedload'},
+			bedLoadServiceOptions);
+			}
+                        
 			if (CONFIG.networkName === NETWORK_DINO) {
 				GCMRC.Graphing.showInfoMsg("#infoMsg",'The sediment supplies from ungaged small tributaries are not included in these sediment budgets.  These tributaries transport relatively small amounts of silt and clay and negligible amounts of sand.  Not including the sediment supplied from these small tributaries therefore does not measurably affect the sand budgets, but does result in small negative step changes in the silt and clay budgets that are not the result of erosion.');
 			}
@@ -768,5 +790,125 @@ GCMRC.Page = {
 		GCMRC.Page.sliderConfig.values(function(el) {
 			$('div[name=' + el.name + ']').slider("option", "value", el.adjustDefault);
 		});
-	}
+	},
+	dealWithBedLoadResponse: function(bedLoad, bedLoadData, config) {
+		var parseColData = function(str) {
+			var result = null;
+			var low = null, med = null, high = null;
+
+			if (str) {
+				var strSplit = str.split(';');
+				if (2 < strSplit.length) {
+					low = parseFloat(strSplit[0]);
+					med = parseFloat(strSplit[1]);
+					high = parseFloat(strSplit[2]);
+				} else {
+					med = parseFloat(str);
+				}
+			}
+
+			if (!isNullUndefinedOrNaN(med)) {
+				if (isNullUndefinedOrNaN(low)) {
+					low = med;
+				}
+				if (isNullUndefinedOrNaN(high)) {
+					high = med;
+				}
+			}
+			result = [low, med, high];
+
+			return result;
+		};
+		var timeColumn = "time";
+		var conf = $.extend({}, config);
+		var hasData = false;
+		conf.bedLoadData = bedLoadData.success.data.map(function(el) {
+			var result;
+
+			result = [parseInt(el[timeColumn])];
+			
+			var columns = bedLoad.responseColumns || bedLoad.columns;
+			var dataColumns = columns.filter(function(n){return !n.startsWith(timeColumn)}).map(function(col) {
+				return parseColData(el[col]);
+			});
+
+			[].push.apply(result, dataColumns);
+
+
+			if (!hasData && dataColumns.reduce(function(a, b) {
+				return a || b.some(function(e){
+					return e === 0 || !!e;
+				});
+			}, false)) {
+				hasData = true;
+			}
+
+			return result;
+		});
+            },
+	    getBedLoadData: function(param, config, urlParams) {
+			$('#infoMsg').empty();
+			$("#errorMsg").empty();
+			var urls = {
+			    agg: 'services/agg/'
+			};
+			urlParams["output"] = "json";
+			$.ajax({
+				type: 'GET',
+				dataType: 'json',
+				url: CONFIG.relativePath + urls[param],
+				data: urlParams,
+				timeout: 1200000, /* 20 minutes allowed, from start to data complete */
+				success: function(bedLoadData, textStatus, jqXHR) {
+					if (!bedLoadData || (!bedLoadData.contentType && bedLoadData.contentType === "text/xml")) {
+						GCMRC.Graphing.clearErrorMsg();
+						GCMRC.Graphing.showErrorMsg("An error has occurred.  Please contact <a href='mailto:" + GCMRC.administrator + "@usgs.gov'>" + GCMRC.administrator + "@usgs.gov</a>");
+					} else {
+						if (bedLoadData.data && !bedLoadData.data.ERROR && bedLoadData.data.time) {
+							data = {
+								success : {
+									"@rowCount" : "-1",
+									data : [
+										bedLoadData.data
+									]
+								}
+							};
+						}
+						//success
+						if (bedLoadData.success && bedLoadData.success.data && $.isArray(bedLoadData.success.data)) {
+							config.bedLoad.forEach(function(bedLoad) {
+								if (bedLoad.dealWithBedLoadResponse) {
+								    dealWithBedLoadResponse(bedLoad, bedLoadData, config);
+								}
+							});
+						} else if (bedLoadData.data && bedLoadData.data.ERROR) {
+							GCMRC.Graphing.clearErrorMsg();
+							GCMRC.Graphing.showErrorMsg("Please select a parameter to graph!");
+						} else {
+							LOG.error("what the heck just happened?");
+						}
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					clearErrorMessage();
+					var msg = "";
+					switch(textStatus) {
+						case 'timeout':
+							msg = "The browser timed out waiting for a response from the server.";
+						break;
+						case 'abort':
+							msg = "The request was aborted.";
+						break;
+						case 'parsererror':
+							msg = "A response was received, but it was unreadable.";
+						break;
+						case 'error':
+						//break; fall thru
+					default:
+						msg = "Some type of server or network error occured.";
+					}
+					showErrorMessage("Your request could not be completed.  Reason: '" + msg + "'  If you repeatedly receive this message, contact <a href='mailto:" + GCMRC.administrator + "@usgs.gov'>" + GCMRC.administrator + "@usgs.gov</a>");
+				}
+			});
+		}
 };

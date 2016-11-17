@@ -82,8 +82,8 @@ GCMRC.Reaches = function () {
 		slider.minorTribLoad.adjustMax = 100;
 	}
 	else if ("DINO" === CONFIG.networkName) {
-		slider.bedLoad.adjustMax = 100;
-		slider.bedLoad.adjustDefault = 10;
+		slider.bedLoad.adjustMax = 0;
+		slider.bedLoad.adjustDefault = 0;
 
 		slider.riverFinesLoad.adjustMax = 50;
 		slider.riverFinesLoad.adjustDefault = 10;
