@@ -23,6 +23,12 @@ var MatrixWorker = function(finesOrSand) {
 			[0, 0, 0],
 			[-1, -0, 1]
 		]),
+		"riverBedload": new goog.math.Matrix([
+			[1, 0, 1],
+			[1, 0, 1],
+			[0, 0, 0],
+			[-1, 0, -1]
+		]),
 		"minor": new goog.math.Matrix([
 			[0, 0, 0],
 			[0, 0, 0],
@@ -92,24 +98,28 @@ MatrixWorker.prototype.transformArray = function(config) {
 		percentages["river"] = config.b || 0;
 		percentages["major"] = config.c || 0;
 		percentages["minor"] = config.d || 0;
+		percentages["riverBedload"] = config.riverBedload || 0;
 	}
 	
 
 	var transformMatrix = (this.xformMatrices["sign"].multiply(1)).
 			add(this.xformMatrices["bedload"].multiply(percentages["bedload"])).
 			add(this.xformMatrices["river"].multiply(percentages["river"])).
+			add(this.xformMatrices["riverBedload"].multiply(percentages["riverBedload"])).
 			add(this.xformMatrices["minor"].multiply(percentages["minor"])).
 			add(this.xformMatrices["major"].multiply(percentages["major"]));
 	
 	var doubleTransformMatrix = (this.xformMatrices["sign"].multiply(1)).
 			add(this.xformMatrices["bedload"].multiply(percentages["bedload"])).
 			add(this.xformMatrices["river"].multiply(percentages["river"])).
+			add(this.xformMatrices["riverBedload"].multiply(percentages["riverBedload"])).
 			add(this.xformMatrices["minor"].multiply(percentages["minor"])).
 			add(this.xformMatrices["major"].multiply(percentages["major"] * 2));
 	
 	var quadTransformMatrix = (this.xformMatrices["sign"].multiply(1)).
 		add(this.xformMatrices["bedload"].multiply(percentages["bedload"])).
 		add(this.xformMatrices["river"].multiply(percentages["river"])).
+		add(this.xformMatrices["riverBedload"].multiply(percentages["riverBedload"])).
 		add(this.xformMatrices["minor"].multiply(percentages["minor"])).
 		add(this.xformMatrices["major"].multiply(percentages["major"] * 4));
 
