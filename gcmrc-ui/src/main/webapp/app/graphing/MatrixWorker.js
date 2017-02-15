@@ -24,10 +24,10 @@ var MatrixWorker = function(finesOrSand) {
 			[-1, -0, 1]
 		]),
 		"riverBedload": new goog.math.Matrix([
-			[1, 0, 1],
-			[1, 0, 1],
+			[1.253, 0, 2.487],
 			[0, 0, 0],
-			[-1, 0, -1]
+			[0, 0, 0],
+			[0, 0, 0]
 		]),
 		"minor": new goog.math.Matrix([
 			[0, 0, 0],
