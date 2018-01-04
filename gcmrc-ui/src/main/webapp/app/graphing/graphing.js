@@ -563,7 +563,7 @@ GCMRC.Graphing = function(hoursOffset) {
 						data.success.data.forEach(function(graph) {
 							dealWithDurationCurveResponse(graph.groupId, graph, config, buildDurationCurve);
 							gapMinutes = graph.gapMinutesPercent;
-							consecutiveGapMinutes = graph.consecutiveGapMinutes;
+							consecutiveGapMinutes = graph.consecutiveGap;
 						});
 						
 						//Add proper UI elements based on which duration curves were built
@@ -637,18 +637,17 @@ GCMRC.Graphing = function(hoursOffset) {
 		});
 	};
 
-	var createDurationCurveGapMinutesMessage = function(gapMinutes, consecutiveGapMinutes){
-	    var consecutiveGapMinutesResult = '';
-	    var consecGapMinutesMessage = "";
+	var createDurationCurveGapMinutesMessage = function(gapMinutes, consecutiveGap){
+	    var consecutiveGapResult = '';
+	    var consecGapMessage = "";
 	    
-	    consecutiveGapMinutes.forEach(function(el){
-		consecutiveGapMinutesResult = consecutiveGapMinutesResult + el.gapStart + ' to ' + el.gapEnd + ': ' + el.gapMinutes.toString() + ' minutes of no data.<br>'
-	    });
+	    consecutiveGapResult = consecutiveGap.gapTime + ' ' + consecutiveGap.gapUnit
+	    
 
-	    if (consecutiveGapMinutes) {
-	        consecGapMinutesMessage = ' Longest consecutive period(s) of missing data: <br>' + consecutiveGapMinutesResult;
+	    if (consecutiveGap) {
+	        consecGapMessage = ' Longest consecutive period(s) of missing data: <br>' + consecutiveGapResult;
 	    }
-	    var gapMinutesMessage = '<div class="alert alert-info durationCurveMessage" style="display: none;"><button type="button" class="close" data-dismiss="alert">×</button>There are ' + gapMinutes + '% of minutes with no measured data in the selected time period. ' + consecGapMinutesMessage + '</div>';
+	    var gapMinutesMessage = '<div class="alert alert-info durationCurveMessage" style="display: none;"><button type="button" class="close" data-dismiss="alert">×</button>There are ' + gapMinutes + '% of minutes with no measured data in the selected time period. ' + consecGapMessage + '</div>';
 	    
 	    return gapMinutesMessage;
 	};
