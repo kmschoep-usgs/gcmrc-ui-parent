@@ -18,9 +18,9 @@
         <resultMap id="durationCurveGapMinutesResult" type="DurationCurveGapMinutesPercent">
 		<result property="gapMinutesPercent" column="GAP_MINUTES_PERCENT"/>
 	</resultMap>
-        <resultMap id="durationCurveConsecutiveGapMinutesResult" type="DurationCurveConsecutiveGapMinutes">
-		<result property="gapStart" column="GAP_START"/>
-                <result property="gapEnd" column="GAP_END"/>
+        <resultMap id="durationCurveConsecutiveGapResult" type="DurationCurveConsecutiveGap">
+		<result property="gapTime" column="GAP_TIME"/>
+                <result property="gapUnit" column="GAP_UNIT"/>
                 <result property="gapMinutes" column="GAP_MINUTES"/>
 	</resultMap>
         
@@ -472,16 +472,21 @@
             <include refid="withGapData"/>
             select round(gap_minutes/overall_duration_minutes*100,0) as gap_minutes_percent from const_gap_data
         </select>
-        <select id="getDurationCurveConsecutiveGapMinutes" parameterType="map" resultMap="durationCurveConsecutiveGapMinutesResult">
+        <select id="getDurationCurveConsecutiveGap" parameterType="map" resultMap="durationCurveConsecutiveGapResult">
           with
             <include refid="withGapDuration"/>
-            select to_char(gap_start, 'YYYY-MM-DD"T"HH24:MI:SS') gap_start, 
-            to_char(gap_end,'YYYY-MM-DD"T"HH24:MI:SS')gap_end, 
-            max_gap_minutes gap_minutes from (
-          select 
-          group_id, gap_start, gap_end, gap_minutes, max(gap_minutes) over (partition by group_id) max_gap_minutes
-          from gap_duration )
-          where gap_minutes = max_gap_minutes
-            order by gap_start
+            select 
+            case 
+                   when round(gap_minutes/60,2) < 24 then round(gap_minutes/60,2) 
+                   when round(gap_minutes/60,2) >= 24 then round(gap_minutes/60/24,2)
+                   end gap_time,
+                   case 
+                   when round(gap_minutes/60,2) < 24 then 'hours'
+                   when round(gap_minutes/60,2) >=24 then 'days'
+                   end gap_unit
+              from (
+            select max(gap_minutes) gap_minutes
+                      from gap_duration
+                      )
         </select>
 </mapper>

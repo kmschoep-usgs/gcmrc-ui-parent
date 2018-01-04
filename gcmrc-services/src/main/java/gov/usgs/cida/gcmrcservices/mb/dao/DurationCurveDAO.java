@@ -3,7 +3,7 @@ package gov.usgs.cida.gcmrcservices.mb.dao;
 import gov.usgs.cida.gcmrcservices.mb.MyBatisConnectionFactory;
 import gov.usgs.cida.gcmrcservices.mb.model.DurationCurve;
 import gov.usgs.cida.gcmrcservices.mb.model.DurationCurveGapMinutesPercent;
-import gov.usgs.cida.gcmrcservices.mb.model.DurationCurveConsecutiveGapMinutes;
+import gov.usgs.cida.gcmrcservices.mb.model.DurationCurveConsecutiveGap;
 import gov.usgs.cida.gcmrcservices.mb.model.DurationCurvePoint;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +46,7 @@ public class DurationCurveDAO {
 		try (SqlSession session = sqlSessionFactory.openSession()) {
 			List<DurationCurvePoint> returnedPoints = session.selectList( queryPackage + ".DurationCurveMapper.getDurationCurve", params);
 			Double gapMinutes;
-			List<DurationCurveConsecutiveGapMinutes> consecutiveGapMinutes;
+			List<DurationCurveConsecutiveGap> consecutiveGap;
 			//Log claculations will sometimes return an extra bin with the values that are <= 0 so check that points == binCount or binCount + 1
 			//Verify returned points are valid
 			boolean valid = returnedPoints.size() == binCount || returnedPoints.size() == binCount + 1;
@@ -60,10 +60,10 @@ public class DurationCurveDAO {
 			}
 			
 			gapMinutes = getDurationCurveGapMinutesPercent(siteName, startTime, endTime, groupId);
-			consecutiveGapMinutes = getDurationCurveConsecutiveGapMinutes(siteName, startTime, endTime, groupId);
+			consecutiveGap = getDurationCurveConsecutiveGap(siteName, startTime, endTime, groupId);
 			
 			if(valid){
-				result = new DurationCurve(returnedPoints, siteName, groupId, binType, Double.toString(gapMinutes), consecutiveGapMinutes);
+				result = new DurationCurve(returnedPoints, siteName, groupId, binType, Double.toString(gapMinutes), consecutiveGap);
 			} else {
 				log.error("Duration curve query returned invalid data with parameters: [siteName: " + siteName + ", groupId: " + groupId + ", binType: " + binType + "]");
 				result = new DurationCurve(null, siteName, groupId, binType, null, null);
@@ -99,9 +99,9 @@ public class DurationCurveDAO {
 		return result;
 	}
 	
-	public List<DurationCurveConsecutiveGapMinutes> getDurationCurveConsecutiveGapMinutes(String siteName, String startTime, String endTime, int groupId) {		
-	    List<DurationCurveConsecutiveGapMinutes> returnedGapMinutes;
-	    List<DurationCurveConsecutiveGapMinutes> result;
+	public List<DurationCurveConsecutiveGap> getDurationCurveConsecutiveGap(String siteName, String startTime, String endTime, int groupId) {		
+	    List<DurationCurveConsecutiveGap> returnedGap;
+	    List<DurationCurveConsecutiveGap> result;
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("siteName", siteName);
@@ -110,9 +110,9 @@ public class DurationCurveDAO {
 		params.put("groupId", groupId);
 		
 		try (SqlSession session = sqlSessionFactory.openSession()) {
-			returnedGapMinutes = session.selectList( queryPackage + ".DurationCurveMapper.getDurationCurveConsecutiveGapMinutes", params);
+			returnedGap = session.selectList( queryPackage + ".DurationCurveMapper.getDurationCurveConsecutiveGap", params);
 			
-			result = returnedGapMinutes;
+			result = returnedGap;
 			
 		} catch (Exception e) {
 			log.error("Could not get duration curve consecutive gap minutes with parameters: [siteName: " + siteName + ", groupId: " + groupId + "] Error: " + e.getMessage());

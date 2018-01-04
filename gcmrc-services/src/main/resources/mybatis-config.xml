@@ -11,7 +11,7 @@
         <typeAlias type='gov.usgs.cida.gcmrcservices.mb.model.ReachDetail' alias='ReachDetail'></typeAlias>
         <typeAlias type='gov.usgs.cida.gcmrcservices.mb.model.DurationCurvePoint' alias='DurationCurvePoint'></typeAlias>
         <typeAlias type='gov.usgs.cida.gcmrcservices.mb.model.DurationCurveGapMinutesPercent' alias='DurationCurveGapMinutesPercent'></typeAlias>
-        <typeAlias type='gov.usgs.cida.gcmrcservices.mb.model.DurationCurveConsecutiveGapMinutes' alias='DurationCurveConsecutiveGapMinutes'></typeAlias>
+        <typeAlias type='gov.usgs.cida.gcmrcservices.mb.model.DurationCurveConsecutiveGap' alias='DurationCurveConsecutiveGap'></typeAlias>
     </typeAliases>
     <environments default='container'>
         <environment id='container'>
