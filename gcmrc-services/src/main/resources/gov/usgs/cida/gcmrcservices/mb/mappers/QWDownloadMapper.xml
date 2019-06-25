@@ -459,8 +459,8 @@
 			<if test="null != site">
 				station_num = #{site}
 				<if test="null != beginDate and null != endDate">
-					and start_dt &gt;= to_date (#{beginDate}, 'YYYY-MM-DD"T"HH24:MI:SS')
-					and start_dt &lt;= to_date (#{endDate}, 'YYYY-MM-DD"T"HH24:MI:SS')
+					and start_dt &gt;= to_timestamp (#{beginDate}, 'YYYY-MM-DD"T"HH24:MI:SS')
+					and start_dt &lt;= to_timestamp (#{endDate}, 'YYYY-MM-DD"T"HH24:MI:SS')
 				</if>
 			</if>
 		</where>

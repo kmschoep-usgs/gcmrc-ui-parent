@@ -220,8 +220,8 @@
 			<if test="null != site">
 				station_num = #{site}
 				<if test="null != beginDate and null != endDate">
-					and bed_dt &gt;= to_date (#{beginDate}, 'YYYY-MM-DD"T"HH24:MI:SS')
-					and bed_dt &lt;= to_date (#{endDate}, 'YYYY-MM-DD"T"HH24:MI:SS')
+					and bed_dt &gt;= to_timestamp (#{beginDate}, 'YYYY-MM-DD"T"HH24:MI:SS')
+					and bed_dt &lt;= to_timestamp (#{endDate}, 'YYYY-MM-DD"T"HH24:MI:SS')
 				</if>
 			</if>
 		</where>
