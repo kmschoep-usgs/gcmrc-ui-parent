@@ -1,24 +1,18 @@
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
+<%@page import="javax.naming.Context"%>
 <%@page import="org.slf4j.Logger"%>
 <%@page import="org.slf4j.LoggerFactory"%>
-<%@page import="gov.usgs.cida.config.DynamicReadOnlyProperties"%>
-<%!
-	private static final Logger log = LoggerFactory.getLogger("gcmrc_jsp");
-	protected DynamicReadOnlyProperties props = new DynamicReadOnlyProperties();
-
-	{
-		try {
-			props = props.addJNDIContexts(new String[0]);
-		} catch (Exception e) {
-			log.error("Could not find JNDI");
-		}
-	}
+<%@page import="gov.usgs.cida.gcmrc.util.PropertiesLoader"%>
+<%!private static final Logger log = LoggerFactory.getLogger("gcmrc_jsp");
+	protected PropertiesLoader propertiesLoader = new PropertiesLoader();
+	protected Context context = propertiesLoader.getContextProps();
+	
 	protected Map<String, Boolean> features = new HashMap<String, Boolean>();
 	
 	{
-		features.put("CANYONLANDS", Boolean.parseBoolean(props.getProperty("gcmrc.features.canyonlands", "false")));
+		features.put("CANYONLANDS", Boolean.parseBoolean(propertiesLoader.getProp(context, "gcmrc.features.canyonlands", "false")));
 	}
 %>
 <script type="text/javascript">
