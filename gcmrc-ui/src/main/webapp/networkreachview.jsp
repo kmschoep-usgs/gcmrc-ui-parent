@@ -1,25 +1,18 @@
+<%@page import="gov.usgs.cida.gcmrc.util.PropertiesLoader"%>
 <%@page import="gov.usgs.cida.path.PathUtil"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@page import="java.util.Map"%>
+<%@page import="javax.naming.Context"%>
 <%@page import="org.slf4j.Logger"%>
 <%@page import="org.slf4j.LoggerFactory"%>
-<%@page import="gov.usgs.cida.config.DynamicReadOnlyProperties"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%!	
+<%!
 	private static final Logger log = LoggerFactory.getLogger("networkreachview_jsp");
-	protected DynamicReadOnlyProperties props = new DynamicReadOnlyProperties();
+	protected PropertiesLoader propertiesLoader = new PropertiesLoader();
+	protected Context context = propertiesLoader.getContextProps();
 
-	{
-		try {
-			props = props.addJNDIContexts(new String[0]);
-		} catch (Exception e) {
-			log.error("Could not find JNDI");
-		}
-	}
-	boolean development = Boolean.parseBoolean(props.getProperty("all.development")) || Boolean.parseBoolean(props.getProperty("${project.artifactId}.development"));
-	protected String warningMessage = props.getProperty("gcmrc.site.warning.message", "");
-%>
-
+	boolean development = Boolean.parseBoolean(propertiesLoader.getProp(context, "all.development")) || Boolean.parseBoolean(propertiesLoader.getProp(context, "${project.artifactId}.development"));
+	protected String warningMessage = propertiesLoader.getProp(context, "gcmrc.site.warning.message", "");%>
 <%
 	request.setAttribute("development", development);
 	request.setAttribute("logLevel", development?"debug":"info");
