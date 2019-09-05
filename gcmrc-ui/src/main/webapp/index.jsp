@@ -5,7 +5,7 @@
 <%@page import="java.util.Properties"%>
 <%@page import="javax.naming.Context"%>
 <%@page import="gov.usgs.cida.gcmrc.util.PropertiesLoader"%>
-<%@page import="gov.usgs.cida.path.PathUtil"%>
+<%@page import="gov.usgs.cida.gcmrc.util.PathUtil"%>
 <%@page import="org.slf4j.Logger"%>
 <%@page import="org.slf4j.LoggerFactory"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

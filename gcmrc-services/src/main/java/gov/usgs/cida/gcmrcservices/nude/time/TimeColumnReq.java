@@ -3,7 +3,7 @@ package gov.usgs.cida.gcmrcservices.nude.time;
 import gov.usgs.cida.gcmrcservices.TimeUtil;
 import gov.usgs.cida.gcmrcservices.jsl.data.ParameterSpec;
 import gov.usgs.cida.nude.out.mapping.ColumnToXmlMapping;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
