@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>gcmrc-parent</artifactId>
 		<groupId>gov.usgs.cida.gcmrc</groupId>
-		<version>1.1.79-SNAPSHOT</version>
+		<version>1.1.83-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>gcmrc-ui</artifactId>
@@ -13,20 +13,29 @@
 	
 	<dependencies>
 		<dependency>
-			<artifactId>proxy-utils</artifactId>
-			<groupId>gov.usgs.cida</groupId>
-		</dependency>
-		<!-- LOGGING -->
-		<dependency>
-			<!-- Required by proxy-utils -> httpclient -->
-			<artifactId>commons-logging</artifactId>
-			<groupId>commons-logging</groupId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.9</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<scope>compile</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.9</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+		
 		<!-- Normal Servlet dependencies -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -45,30 +54,61 @@
 		</dependency>
 		<!-- JS Templates -->
 		<dependency>
-			<groupId>gov.usgs.cida.jslibs</groupId>
-			<artifactId>jquery</artifactId>
-			<type>war</type>
-		</dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquery</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquery-ui</artifactId>
+                </dependency>
 		<dependency>
-			<groupId>gov.usgs.cida.jslibs</groupId>
-			<artifactId>log4js</artifactId>
-			<type>war</type>
-		</dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>log4javascript</artifactId>
+                </dependency>
 		<dependency>
-			<groupId>gov.usgs.cida.jslibs</groupId>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>modernizr</artifactId>
+                </dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
 			<artifactId>openlayers</artifactId>
-			<type>war</type>
 		</dependency>
-		<dependency>
-			<groupId>gov.usgs.cida.jslibs</groupId>
-			<artifactId>openlayers-decluster</artifactId>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>gov.usgs.cida.jslibs</groupId>
-			<artifactId>bootstrap-core</artifactId>
-			<type>war</type>
-		</dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>bootstrap</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>sugar</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>closure-library</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>angularjs</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>angular-ui-sortable</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>angular-ui-bootstrap</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>bootstrap-datepicker</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>proj4js</artifactId>
+                </dependency>
+                <dependency>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>font-awesome</artifactId>
+                </dependency>
 		<dependency>
 			<groupId>gov.usgs.cida.jslibs</groupId>
 			<artifactId>dygraphs-core</artifactId>
@@ -78,46 +118,87 @@
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
+                <!-- This updates the application.properties file in src/main/resources
+                     and updates it with the version used in webjars which then gets
+                     picked up in JSPs to load the webjars version of js apps -->
+                <resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<pluginManagement>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.github.searls</groupId>
-                <artifactId>jasmine-maven-plugin</artifactId>
-                <version>1.3.1.1</version>
-                <executions>
-                    <execution>
-						<phase>package</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-				<configuration>
-					<jsSrcDir>${project.basedir}</jsSrcDir>
-					<haltOnFailure>false</haltOnFailure>
-					<sourceIncludes>
-						<include>**/target/**/js/closure-library/goog/base.js</include>
-						<include>**/target/**/js/closure-library/goog/debug/error.js</include>
-						<include>**/target/**/js/closure-library/goog/string/string.js</include>
-						<include>**/target/**/js/closure-library/goog/asserts/asserts.js</include>
-						<include>**/target/**/js/closure-library/goog/array/array.js</include>
-						<include>**/target/**/js/closure-library/goog/math/math.js</include>
-						<include>**/target/**/js/closure-library/goog/math/size.js</include>
-						<include>**/target/**/js/closure-library/goog/math/matrix.js</include>
-						<include>**/target/**/js/sugar/sugar-1.3.4.min.js</include>
-						<include>**/target/**/js/js-utils/binary-search.js</include>
-						
-						<include>**/target/**/app/graphing/MatrixWorker.js</include>
-<!--						<include>**/src/test/javascript/MatrixBuildResources.js</include>-->
-						<!--<include>**/src/test/javascript/MatrixUncertaintyResources.js</include>-->
-						
-						<include>**/target/**/app/jslResourceLoad.js</include>
-					</sourceIncludes>
-				</configuration>
-			</plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>3.2.3</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>src/main/webapp</directory>
+                                    <filtering>true</filtering>
+                                    <includes>
+                                        <include>app/graphing/matrixFinesWorker.js</include>
+                                        <include>app/graphing/matrixSandWorker.js</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                        <plugin>
+                            <groupId>com.github.klieber</groupId>
+                            <artifactId>phantomjs-maven-plugin</artifactId>
+                            <version>0.7</version>
+                            <executions>
+                                <execution>
+                                    <goals>
+                                        <goal>install</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <version>2.1.1</version>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>com.github.searls</groupId>
+                            <artifactId>jasmine-maven-plugin</artifactId>
+                            <version>2.2</version>
+                            <executions>
+                                <execution>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>test</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <jsSrcDir>${project.basedir}</jsSrcDir>
+                                <haltOnFailure>false</haltOnFailure>
+                                <phantomjs>
+                                    <version>2.1.1</version>
+                                </phantomjs>
+                                <preloadSources>
+                                    <source>classpath/META-INF/resources/webjars/closure-library/${version.closure}/goog/base.js</source>
+                                    <source>classpath/META-INF/resources/webjars/closure-library/${version.closure}/goog/debug/error.js</source>
+                                    <source>classpath/META-INF/resources/webjars/closure-library/${version.closure}/goog/string/string.js</source>
+                                    <source>classpath/META-INF/resources/webjars/closure-library/${version.closure}/goog/asserts/asserts.js</source>
+                                    <source>classpath/META-INF/resources/webjars/closure-library/${version.closure}/goog/array/array.js</source>
+                                    <source>classpath/META-INF/resources/webjars/closure-library/${version.closure}/goog/math/math.js</source>
+                                    <source>classpath/META-INF/resources/webjars/closure-library/${version.closure}/goog/math/size.js</source>
+                                    <source>classpath/META-INF/resources/webjars/closure-library/${version.closure}/goog/math/matrix.js</source>
+                                    <source>classpath/META-INF/resources/webjars/closure-library/${version.closure}/goog/math/matrix.js</source>
+                                    <source>classpath/META-INF/resources/webjars/sugar/${version.sugarjs}/sugar-full.min.js</source>
+                                </preloadSources>
+                                <sourceIncludes>
+                                    <include>**/target/**/js/js-utils/binary-search.js</include>
+                                    <include>**/target/**/app/graphing/MatrixWorker.js</include>
+                                    <include>**/target/**/app/jslResourceLoad.js</include>
+                                </sourceIncludes>
+                            </configuration>
+                        </plugin>
 		</plugins>
+		</pluginManagement>
 	</build>
 </project>

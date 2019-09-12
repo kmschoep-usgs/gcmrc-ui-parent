@@ -1,1 +1,0 @@
-<script src="${param['relPath']}js/sugar/sugar-1.3.9.min.js"></script>

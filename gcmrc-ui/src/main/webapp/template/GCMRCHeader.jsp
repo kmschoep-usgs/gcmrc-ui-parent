@@ -4,7 +4,7 @@
   		<!-- search bar-->
       <div class="header-search">
        <a class="logo-header" href="https://www.usgs.gov/" title="Home">
-          <img class="img"  src="${param['relPath']}template/images/logo.png"  alt="Home" />
+          <img class="img"  src="${param['relativePath']}template/images/logo.png"  alt="Home" />
         </a>
         <form action="https://www.usgs.gov/science-explorer-results" method="GET" id="search-box">
          <div class="fa-wrapper"><label for="se_search" class="only">Search</label>

@@ -1,21 +1,18 @@
 <%@page import="gov.usgs.cida.gcmrc.util.PropertiesLoader"%>
 <%@page import="gov.usgs.cida.gcmrc.util.PathUtil"%>
-<%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="org.apache.commons.lang3.StringUtils"%>
 <%@page import="java.util.Map"%>
 <%@page import="javax.naming.Context"%>
 <%@page import="org.slf4j.Logger"%>
 <%@page import="org.slf4j.LoggerFactory"%>
-<%@page import="gov.usgs.cida.config.DynamicReadOnlyProperties"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%!
-	private static final Logger log = LoggerFactory.getLogger("stationview_jsp");
+<%!private static final Logger log = LoggerFactory.getLogger("stationview_jsp");
 	protected PropertiesLoader propertiesLoader = new PropertiesLoader();
 	protected Context context = propertiesLoader.getContextProps();
 	
 	boolean development = Boolean.parseBoolean(propertiesLoader.getProp(context, "all.development")) || Boolean.parseBoolean(propertiesLoader.getProp(context, "${project.artifactId}.development"));
-	protected String warningMessage = propertiesLoader.getProp(context, "gcmrc.site.warning.message", "");
-%>
+	protected String warningMessage = propertiesLoader.getProp(context, "gcmrc.site.warning.message", "");%>
 
 <%
 	request.setAttribute("development", development);
@@ -55,7 +52,7 @@
 <!--[if gt IE 8]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
     <head>
         <jsp:include page="template/GCMRCHead.jsp">
-			<jsp:param name="relPath" value="${relativePath}" />
+			<jsp:param name="relativePath" value="${relativePath}" />
 			<jsp:param name="shortName" value="GCMRC" />
 			<jsp:param name="title" value="" />
 			<jsp:param name="description" value="" />
@@ -68,22 +65,20 @@
 			<jsp:param name="development" value="${development}" />
 		</jsp:include>
 
-		<jsp:include page="app/libs.jsp"></jsp:include>
+		<jsp:include page="app/libs.jsp">
+                    <jsp:param name="relativePath" value="${relativePath}" />
+                </jsp:include>
 
 		<jsp:include page="js/bootstrap-datepicker/package.jsp">
-			<jsp:param name="relPath" value="${relativePath}" />
+			<jsp:param name="relativePath" value="${relativePath}" />
 			<jsp:param name="debug-qualifier" value="<%= development%>" />
 		</jsp:include>
 
-		<script src="${relativePath}js/proj4js/proj4js.js" type="text/javascript"></script>
-		<script type="text/javascript">
-			Proj4js.defs["EPSG:26949"] = "+proj=tmerc +lat_0=31 +lon_0=-111.9166666666667 +k=0.9999 +x_0=213360 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs";
-		</script>
-		<jsp:include page="js/openlayers/openlayers.jsp">
-			<jsp:param name="relPath" value="${relativePath}" />
-			<jsp:param name="debug-qualifier" value="${development}" />
-		</jsp:include>
-		<script src="${relativePath}js/openlayers/extension/Renderer/DeclusterCanvas.js" type="text/javascript"></script>
+		<jsp:include page="js/proj4js/package.jsp">
+                    <jsp:param name="relativePath" value="${relativePath}" />
+                </jsp:include>
+                
+		<script src="${relativePath}app/DeclusterCanvas.js" type="text/javascript"></script>
 
 		<jsp:include page="js/dygraphs/dygraphs.jsp">
 			<jsp:param name="relPath" value="${relativePath}" />
@@ -103,7 +98,7 @@
 
 		<jsp:include page="app/gcmrc.jsp"></jsp:include>
 		<jsp:include page="js/angular-sortable/package.jsp">
-			<jsp:param name="relPath" value="${relativePath}" />
+			<jsp:param name="relativePath" value="${relativePath}" />
 			<jsp:param name="debug-qualifier" value="${development}" />
 		</jsp:include>
 		<script type="text/javascript">
@@ -111,11 +106,11 @@
 		</script>
 		<script src="${relativePath}services/rest/station/allsite/${networkName}?jsonp_callback=GCMRC.StationLoad"></script>
 		<jsp:include page="app/graphing/package.jsp">
-			<jsp:param name="relPath" value="${relativePath}" />
+			<jsp:param name="relativePath" value="${relativePath}" />
 			<jsp:param name="debug-qualifier" value="${development}" />
 		</jsp:include>
 		<jsp:include page="pages/page.jsp">
-			<jsp:param name="relPath" value="${relativePath}" />
+			<jsp:param name="relativePath" value="${relativePath}" />
 			<jsp:param name="pageName" value="${pageName}" />
 		</jsp:include>
 		<script src="${relativePath}services/rest/reach/trib/${stationName}?jsonp_callback=GCMRC.Page.reachLoad"></script>
@@ -164,7 +159,7 @@
     <body ng-app="gcmrc">
 		<div class="container-fluid">
 			<jsp:include page="template/GCMRCHeader.jsp">
-				<jsp:param name="relPath" value="${relativePath}" />
+				<jsp:param name="relativePath" value="${relativePath}" />
 				<jsp:param name="header-class" value="" />
 			</jsp:include>
 			<div>
@@ -325,7 +320,6 @@
 				</div>
 			</div>
 			<jsp:include page="template/GCMRCFooter.jsp">
-				<jsp:param name="relPath" value="${relativePath}" />
 				<jsp:param name="header-class" value="" />
 				<jsp:param name="contact-info" value="" />
 			</jsp:include>
