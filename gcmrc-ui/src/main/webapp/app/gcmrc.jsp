@@ -13,8 +13,7 @@
 	
 	{
 		features.put("CANYONLANDS", Boolean.parseBoolean(propertiesLoader.getProp(context, "gcmrc.features.canyonlands", "false")));
-	}
-%>
+	}%>
 <script type="text/javascript">
 var GCMRC = {
 	administrator : 'cida_gcmrc',

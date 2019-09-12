@@ -14,8 +14,7 @@
 	protected Context context = propertiesLoader.getContextProps();
 	
 	boolean development = Boolean.parseBoolean(propertiesLoader.getProp(context, "all.development")) || Boolean.parseBoolean(propertiesLoader.getProp(context, "${project.artifactId}.development"));
-	protected String warningMessage = propertiesLoader.getProp(context, "gcmrc.site.warning.message", "");
-%>
+	protected String warningMessage = propertiesLoader.getProp(context, "gcmrc.site.warning.message", "");%>
 
 <%
 	request.setAttribute("development", development);
@@ -35,7 +34,7 @@
 <!--[if gt IE 8]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
     <head>
         <jsp:include page="template/GCMRCHead.jsp">
-			<jsp:param name="relPath" value="" />
+			<jsp:param name="relativePath" value="" />
 			<jsp:param name="shortName" value="GCMRC" />
 			<jsp:param name="title" value="" />
 			<jsp:param name="description" value="" />
@@ -47,13 +46,12 @@
 			<jsp:param name="expires" value="never" />
 			<jsp:param name="development" value="${development}" />
 		</jsp:include>
-		<jsp:include page="app/libs.jsp"></jsp:include>
+		<jsp:include page="app/libs.jsp">
+                    <jsp:param name="development" value="${development}" />
+                    <jsp:param name="relativePath" value="${relativePath}" />
+                </jsp:include>
 
-		<jsp:include page="js/openlayers/openlayers.jsp">
-			<jsp:param name="relPath" value="${relativePath}" />
-			<jsp:param name="debug-qualifier" value="<%= development%>" />
-		</jsp:include>
-		<script src="${relativePath}js/openlayers/extension/Renderer/DeclusterCanvas.js" type="text/javascript"></script>
+		<script src="${relativePath}app/DeclusterCanvas.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			var CONFIG = {};
 
@@ -63,7 +61,7 @@
 
 		<jsp:include page="app/gcmrc.jsp"></jsp:include>
 		<jsp:include page="pages/page.jsp">
-			<jsp:param name="relPath" value="${relativePath}" />
+			<jsp:param name="relativePath" value="${relativePath}" />
 			<jsp:param name="pageName" value="${pageName}" />
 		</jsp:include>
 
@@ -71,7 +69,7 @@
     <body>
 		<div class="container-fluid">
 			<jsp:include page="template/GCMRCHeader.jsp">
-				<jsp:param name="relPath" value="${relativePath}" />
+				<jsp:param name="relativePath" value="${relativePath}" />
 				<jsp:param name="header-class" value="" />
 			</jsp:include>
 				<!--[if lt IE 7]>
@@ -286,7 +284,6 @@
 					</div>
 				</div>
 			<jsp:include page="template/GCMRCFooter.jsp">
-				<jsp:param name="relPath" value="${relativePath}" />
 				<jsp:param name="header-class" value="" />
 				<jsp:param name="contact-info" value="" />
 			</jsp:include>

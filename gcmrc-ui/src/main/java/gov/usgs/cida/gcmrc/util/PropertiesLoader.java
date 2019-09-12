@@ -17,10 +17,10 @@ import org.slf4j.LoggerFactory;
  */
 public class PropertiesLoader {
 	private static final Logger log = LoggerFactory.getLogger("stationview_jsp");
-
+	
 	public Context getContextProps() {
 		Context envContext = null;
-
+		
 		try {
 			Context context = new InitialContext();
 			envContext = (Context) context.lookup("java:/comp/env");
@@ -29,7 +29,7 @@ public class PropertiesLoader {
 		}
 		return envContext;
 	};
-
+	
 	public Properties getProperties(){
 		Properties props = new Properties();
 		try {
@@ -40,16 +40,16 @@ public class PropertiesLoader {
 		}
 		return props;
 	};
-
+	
 	public String getProp(Properties props, String key) {
 		return props.getProperty(key, "");
 	}
-
+	
 	public String getProp(Context envContext, String key, String defaultValue) {
 		String value = getProp(envContext, key);
 		return (value == null)? defaultValue: value;
 	}
-
+	
 	public String getProp(Context envContext, String key) {
 		String propValue = null;
 		try {

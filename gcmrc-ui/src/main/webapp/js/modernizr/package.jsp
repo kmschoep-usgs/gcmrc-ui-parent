@@ -1,1 +1,0 @@
-<script src="${param['relPath']}js/modernizr/modernizr.min.js"></script>

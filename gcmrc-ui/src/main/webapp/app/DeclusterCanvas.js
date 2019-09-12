@@ -353,7 +353,7 @@ OpenLayers.Renderer.DeclusterCanvas = OpenLayers.Class(OpenLayers.Renderer.Canva
                     if (data[3] === 255) { // antialiased
                         var id = data[2] + (256 * (data[1] + (256 * data[0])));
                         if (id) {
-                            featureId = "OpenLayers.Feature.Vector_" + (id - 1 + this.hitOverflow);
+                            featureId = "OpenLayers_Feature_Vector_" + (id - 1 + this.hitOverflow);
                             try {
                                 feature = this.indexer.features[featureId][0];
                             } catch(err) {

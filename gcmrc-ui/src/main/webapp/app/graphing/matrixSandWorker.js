@@ -1,15 +1,18 @@
-importScripts("../../js/closure-library/goog/base.js", 
-"../../js/closure-library/goog/debug/error.js",
-"../../js/closure-library/goog/string/string.js",
-"../../js/closure-library/goog/asserts/asserts.js",
-"../../js/closure-library/goog/array/array.js",
-"../../js/closure-library/goog/math/math.js",
-"../../js/closure-library/goog/math/size.js",
-"../../js/closure-library/goog/math/matrix.js"
-);
+var closureLocation = "../../webjars/closure-library/${version.closure}/goog";
+importScripts(
+        closureLocation + "/base.js",
+        closureLocation + "/deps.js",
+        closureLocation + "/debug/error.js",
+        closureLocation + "/string/string.js",
+        closureLocation + "/asserts/asserts.js",
+        closureLocation + "/array/array.js",
+        closureLocation + "/math/math.js",
+        closureLocation + "/math/size.js",
+        closureLocation + "/math/matrix.js"
+        );
 
-importScripts("../../js/sugar/sugar-1.3.9.min.js");
-importScripts("../../js/js-utils/binary-search.min.js");
+importScripts("../../webjars/sugar/${version.sugarjs}/sugar-full.min.js");
+importScripts("../../js/js-utils/binary-search.js");
 
 importScripts("../../app/graphing/MatrixWorker.js");
 
