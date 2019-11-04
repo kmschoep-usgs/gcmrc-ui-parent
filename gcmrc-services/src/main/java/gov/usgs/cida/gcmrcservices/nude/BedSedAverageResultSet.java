@@ -34,7 +34,7 @@ public class BedSedAverageResultSet extends PeekingResultSet {
 	protected static final BigDecimal cutoffMassInGrams = new BigDecimal("20.000");
 	protected static final Set<SampleSetRule> rules = new HashSet<>(Arrays.asList(new SampleSetRule[] {
 		new SampleSetRule(Range.singleton(1), Range.atLeast(1)),
-		new SampleSetRule(Range.singleton(3), Range.atLeast(2)),
+		new SampleSetRule(Range.closed(2, 3), Range.atLeast(2)),
 		new SampleSetRule(Range.atLeast(4), Range.atLeast(3))
 	}));
 	

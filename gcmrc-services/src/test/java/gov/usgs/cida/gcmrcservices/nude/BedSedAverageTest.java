@@ -123,6 +123,7 @@ public class BedSedAverageTest {
 			new String[] {"1020","1","80","50","5.77", "11.31"},
 			new String[] {"1061","2","40","54","7.07", "13.86"},
 			new String[] {"1092","3","30","50",null, null},
+			new String[] {"1103","4","42","41","2.00", "3.92"},
 			new String[] {"1114","5","50","20",null, null}
 		});
 		
@@ -183,6 +184,7 @@ public class BedSedAverageTest {
 			new String[] {"" + dtf.parseDateTime("1997-11-06T11:30:00-07:00").getMillis(),"3","0.370","309.4","0.02338","0.04582"},
 			new String[] {"" + dtf.parseDateTime("1997-11-07T10:00:00-07:00").getMillis(),"4","0.349","410.9","0.02652","0.05198"},
 			new String[] {"" + dtf.parseDateTime("2001-07-23T17:10:00-07:00").getMillis(),"5","0.400","412.30","0.01211","0.02374"},
+			new String[] {"" + dtf.parseDateTime("2001-08-08T13:21:00-07:00").getMillis(),"6","0.335","398.83","0.01597","0.03130"},
 			new String[] {"" + dtf.parseDateTime("2001-08-15T14:35:00-07:00").getMillis(),"7","0.298","449.40","0.01506","0.02952"},
 			new String[] {"" + dtf.parseDateTime("2001-09-04T15:30:00-07:00").getMillis(),"8","0.342","407.35","0.00856","0.01678"},
 			new String[] {"" + dtf.parseDateTime("2001-09-13T13:45:00-07:00").getMillis(),"9","0.282","406.73","0.06768","0.13265"},
