@@ -185,7 +185,7 @@
 			g.display_order,
 			'Y' is_visible
 			from qw_por_star qwp, group_name g
-				where qwp.group_id = g.group_id and qwp.group_id in (89, 90, 92))
+				where qwp.group_id = g.group_id and qwp.group_id in (89, 90, 92, 121))
 			t_a_summary
 		<where>
 			<if test="null != site">
