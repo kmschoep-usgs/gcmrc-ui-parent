@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>gcmrc-parent</artifactId>
 		<groupId>gov.usgs.cida.gcmrc</groupId>
-		<version>1.1.84</version>
+		<version>1.1.85-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>gcmrc-services</artifactId>
