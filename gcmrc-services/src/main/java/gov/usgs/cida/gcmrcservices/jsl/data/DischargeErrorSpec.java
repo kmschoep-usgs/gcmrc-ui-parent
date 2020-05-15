@@ -92,7 +92,7 @@ public class DischargeErrorSpec extends DataSpec {
 		result.append("  GROUP_NAME G");
 		result.append(" WHERE DED.SITE_ID          = S.SITE_ID(+)");
 		result.append("  AND DED.GROUP_ID         = G.GROUP_ID(+)");
-		result.append("  AND SS.SITE_ID         = S.SITE_ID(+)");
+		result.append("  AND SS.SITE_ID(+)         = S.SITE_ID");
 		
 		if(this.parameterCode != null && this.parameterCode.sampleMethod != null) {
 			String sqlCleanMethod = cleanSql(this.parameterCode.sampleMethod);
