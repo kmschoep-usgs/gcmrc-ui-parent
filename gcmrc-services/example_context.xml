@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+--><!-- The contents of this file will be loaded for each web application --><Context>
+
+    <!-- Default set of monitored resources. If one of these changes, the    -->
+    <!-- web application will be reloaded.                                   -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
+
+    <!-- Uncomment this to disable session persistence across Tomcat restarts -->
+    <!--
+    <Manager pathname="" />
+    -->
+  
+<Resource
+    auth="Container"
+    driverClassName="org.postgresql.Driver"
+    initialSize="0"
+    logAbandoned="true"
+    maxIdle="8"
+    maxTotal="8"
+    maxWaitMillis="5000"
+    minIdle="0"
+    minEvictableIdleTimeMillis="1800000"
+    name="jdbc/gcmrc-uploadsDS"
+    password="[database_password]"
+    removeAbandonedOnBorrow="true"
+    removeAbandonedOnMaintenance="true"
+    removeAbandonedTimeout="300"
+    testOnBorrow="true"
+    testWhileIdle="true"
+    timeBetweenEvictionRunsMillis="-1"
+    type="javax.sql.DataSource"
+    url="jdbc:postgresql://[postgres_database_address]:5432/gdaws?currentSchema=gdaws_data"
+    username="GDAWS_RW_USER"
+    validationQuery="select * from dual"
+    validationQueryTimeout="1"
+/>
+
+
+<Resource auth="Container" 
+driverClassName="org.postgresql.Driver" 
+logAbandoned="true" 
+maxIdle="8" 
+maxTotal="8" 
+maxWaitMillis="5000" 
+minEvictableIdleTimeMillis="1800000" 
+minIdle="0" name="jdbc/gcmrcDS" 
+password="[database_password]" 
+removeAbandonedOnBorrow="true" 
+removeAbandonedOnMaintenance="true" 
+removeAbandonedTimeout="300" 
+testOnBorrow="true" testWhileIdle="true" 
+timeBetweenEvictionRunsMillis="-1" 
+type="javax.sql.DataSource" 
+url="jdbc:postgresql://[postgres_database_address]:5432/gdaws?currentSchema=gdaws_data" 
+username="gdaws_user" 
+validationQuery="select 1" validationQueryTimeout="1"/>
+
+
+<Environment name="development" type="java.lang.String" value="true" override="true"/>
+<Environment name="all.development" type="java.lang.String" value="true" override="false" />
+
+<Environment name="auth-url" value="https://intcida-test.er.usgs.gov/auth-webservice/" type="java.lang.String" override="true"/>
+<Environment name="gcmrc.services-url" value="http://localhost:8080/gcmrc-services/" type="java.lang.String" override="true"/>
+<Environment name="gcmrc.geoserver-url" value="http://[geoserver_address]:8080/geoserver/" type="java.lang.String" override="true"/>
+<Environment name="gcmrc.photos-url" value="http://[dev_server_address]:8080/gcmrc-photos/" type="java.lang.String" override="true"/>
+
+<Environment name="maxFileSize" override="true" type="java.lang.String" value="250MB" />
+<Environment name="maxRequestSize" override="true" type="java.lang.String" value="500MB" />
+
+<Environment name="gcmrc.site.warning.message" value="" type="java.lang.String" override="true"/>
+
+<Environment name="gcmrc.features.canyonlands" value="true" type="java.lang.String" override="true"/>
+<Environment name="gcmrc.features.riverdelta" value="true" type="java.lang.String" override="true"/>
+
+<Environment name="gdawsUser" type="java.lang.String" value="gdaws_rw_user" override="true"/>
+<Environment name="gdawsPassword" type="java.lang.String" value="[gdaws_rw_user_password]" override="true"/>
+<Environment name="gdawsHost" type="java.lang.String" value="[postgres_host_name]" override="true"/>
+<Environment name="gdawsPort" type="java.lang.String" value="5432" override="true"/>
+<Environment name="gdawsDBName" type="java.lang.String" value="gdaws" override="true"/>
+<Environment name="gdawsSchemaName" type="java.lang.String" value="gdaws_data" override="true"/>
+
+<!--  ALL THIS WILL CHANGE WHEN KEYCLOAK IS INTRODUCED -->
+<Environment name="oauthClientId" override="true" type="java.lang.String" value="gcmrc-dev" />
+<Environment name="oauthClientSecret" override="true" type="java.lang.String" value="[auth client password]" />
+<Environment name="oauthClientName" override="true" type="java.lang.String" value="gcmrc-dev" />
+<Environment name="oauthClientAccessTokenUri" override="true" type="java.lang.String" value="https://auth.nwis.usgs.gov/oauth/token" />
+<Environment name="oauthClientAuthorizationUri" override="true" type="java.lang.String" value="https://auth.nwis.usgs.gov/oauth/authorize" />
+<Environment name="oauthResourceTokenKeyUri" override="true" type="java.lang.String" value="https://auth.nwis.usgs.gov/oauth/token_key" />
+<Environment name="oauthResourceId" override="true" type="java.lang.String" value="gcmrc" />
+<Environment name="oauthRedirectUriTemplate" override="true" type="java.lang.String" value="https://localhost:8443/gcmrc-uploads/login/oauth2/code/waterAuth" />
+<Environment name="oauthScope" override="true" type="java.lang.String" value="read" />
+<Environment name="gcmrc.admin.role" override="true" type="java.lang.String" value="[gcmrc local role]"/>
+<Environment name="gcmrc.login.page" override="true" type="java.lang.String" value="[keycloak login page]"/>
+</Context>
