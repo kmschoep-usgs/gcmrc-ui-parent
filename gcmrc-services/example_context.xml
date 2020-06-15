@@ -75,7 +75,6 @@ validationQuery="select 1" validationQueryTimeout="1"/>
 <Environment name="development" type="java.lang.String" value="true" override="true"/>
 <Environment name="all.development" type="java.lang.String" value="true" override="false" />
 
-<Environment name="auth-url" value="https://intcida-test.er.usgs.gov/auth-webservice/" type="java.lang.String" override="true"/>
 <Environment name="gcmrc.services-url" value="http://localhost:8080/gcmrc-services/" type="java.lang.String" override="true"/>
 <Environment name="gcmrc.geoserver-url" value="http://[geoserver_address]:8080/geoserver/" type="java.lang.String" override="true"/>
 <Environment name="gcmrc.photos-url" value="http://[dev_server_address]:8080/gcmrc-photos/" type="java.lang.String" override="true"/>
